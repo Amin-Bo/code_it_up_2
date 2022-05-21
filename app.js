@@ -8,6 +8,7 @@ var passport = require('passport')
 require('dotenv').config();
 const UserRouter = require('./routes/user');
 const ChatRouter = require('./routes/chat');
+const AdminRouter = require('./routes/admin');
 //connecting to database
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -38,5 +39,6 @@ app.use(express.static(path.join(__dirname, '/')));
 app.use(passport.initialize());
 app.use('/api/user', UserRouter);
 app.use('/api/chat', ChatRouter);
+app.use('/api/admin', AdminRouter);
 
 module.exports = app;

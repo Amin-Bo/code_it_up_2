@@ -28,15 +28,8 @@ exports.applyToAssociation = (req, res, next) => {
     })
 }
 exports.userProfile=(req,res)=>{
-    User.findById(req.user._id,(err,user)=>{
-        if(err){
-            res.status(500).send({
-                message:err.message
-            })
-        }else{
-            res.status(200).send({
-                user:user
-            })
-        }
-    })
+    let token = req.headers.authorization.split(' ')[1];
+    decoded = jwt.verify(token, 'tnDigital');
+    req.user = decoded;
+    return res.status(200).json({user:decoded.user})
 }

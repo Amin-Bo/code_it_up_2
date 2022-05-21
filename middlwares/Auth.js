@@ -25,9 +25,7 @@ module.exports = (req, res, next) => {
             next();
           }
           else{
-            res.status(500).send({
-              message:"You are not a founder of any association"
-            })
+          next()
           }
         }
       })
