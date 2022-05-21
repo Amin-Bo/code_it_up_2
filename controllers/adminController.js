@@ -29,7 +29,7 @@ exports.getAssociationById = (req, res) => {
                 association: association
             });
         }
-    }).populate('founder', ['name', 'email', 'type'])
+    }).populate('founder', ['name', 'email', 'type']).populate('members.member')
 }
 exports.updateAssociationStatus = (req, res) => {
     Association.findByIdAndUpdate(req.params.id, {

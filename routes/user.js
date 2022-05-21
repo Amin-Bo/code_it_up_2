@@ -30,7 +30,7 @@ const storageEvents = multer.diskStorage({
 //Login
 router.post('/login', AuthController.login);
 //Registration
-router.post('/register', AuthController.register);
+router.post('/register',multer({storage:storageEvents}).single("event_img"), AuthController.register);
 router.post('/registerUser', AuthController.registerUser);
 
 router.post('/apply/:id', Auth, userController.applyToAssociation);

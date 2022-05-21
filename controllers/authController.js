@@ -86,7 +86,7 @@ exports.register = (req, res, next) => {
         name: req.body.association,
         description: req.body.description,
         email: req.body.emailAssociation,
-        logo: req.body.logo,
+        logo: req.file.filename,
         founder: newUser._id,
     });
     const query = req.body.email;
