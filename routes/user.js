@@ -34,7 +34,7 @@ router.post('/register', AuthController.register);
 router.post('/registerUser', AuthController.registerUser);
 
 router.post('/apply/:id', Auth, userController.applyToAssociation);
-
+router.get('/profile',Auth, userController.userProfile);
 // founder routers
 router.get('/getAppliedMembers', Auth, founderController.GetAppliedMember);
 router.post('/memberStatus/:id', Auth, founderController.changeMemberStatus);

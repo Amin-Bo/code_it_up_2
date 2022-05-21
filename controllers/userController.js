@@ -27,3 +27,16 @@ exports.applyToAssociation = (req, res, next) => {
 
     })
 }
+exports.userProfile=(req,res)=>{
+    User.findById(req.user._id,(err,user)=>{
+        if(err){
+            res.status(500).send({
+                message:err.message
+            })
+        }else{
+            res.status(200).send({
+                user:user
+            })
+        }
+    })
+}
