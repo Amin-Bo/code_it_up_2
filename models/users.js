@@ -12,6 +12,7 @@ const UserSchema = mongoose.Schema({
   cin : { type: String, required: false},
   adresse:{ type: String, required: false},
   password: { type: String, required: true },
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   type: {
     type: String,
     enum: ["admin", "founder","staff","member"],

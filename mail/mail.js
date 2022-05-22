@@ -43,7 +43,8 @@ exports.sendToAdmin = (req, res, next) => {
     return console.log("Email sent!!!");
   });
 };
-exports.sendToEmployee = (req, res, next) => {
+exports.sendNewsLetter = (req, res, next) => {
+  console.log(req)
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -69,7 +70,7 @@ exports.sendToEmployee = (req, res, next) => {
           let mailOptions = {
             from: "cls.rh.2022@gmail.com", // TODO: email sender
             to: user.email, // TODO: email receiver
-            subject: "Your Request's status has been updated",
+            subject: "New activity from your follwed association",
             template: "employee",
             context: {
               name: user.firstName + " " +user.lastName,

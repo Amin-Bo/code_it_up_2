@@ -33,3 +33,21 @@ exports.userProfile=(req,res)=>{
     req.user = decoded;
     return res.status(200).json({user:decoded.user})
 }
+exports.followAssociation=(req,res)=>{
+
+    User.findByIdAndUpdate(req.user._id,{
+        $push:{
+            following:req.params.id
+        }
+    },(err,user)=>{
+        if(err){
+            res.status(500).send({
+                message:err.message
+            })
+        }else{
+            res.status(200).send({
+                message:"followed successfully"
+            })
+        }
+    });
+}

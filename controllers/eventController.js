@@ -1,7 +1,9 @@
 const Article = require('../models/article');
 const multer = require('multer');
 const Event = require('../models/event');
+const mail = require('../mail/mail');
 const path = require('path');
+const User = require('../models/users');
 const MIME_TYPE_MAP = {
     'image/png': 'png',
     'image/jpeg': 'jpg',
@@ -29,6 +31,11 @@ exports.addEvent = (req, res) => {
                 message: err.message
             });
         } else {
+            User.find({
+                following: event.association
+            },(err,users)=>{
+                console.log(users)
+            })
             res.status(200).send({
                 message: "Article added successfully",
                 event: event

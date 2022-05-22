@@ -17,7 +17,8 @@ const path = require('path');
 const MIME_TYPE_MAP = {
     'image/png': 'png',
     'image/jpeg': 'jpg',
-    'image/jpg': 'jpg'
+    'image/jpg': 'jpg',
+    'image/jpg': 'jpeg'
 };
 const storageEvents = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -127,5 +128,6 @@ router.post('/article/add', Auth,multer({storage:storageEvents}).single("event_i
         }
     })
 });
+router.post('/follow/:id', Auth, userController.followAssociation);
 module.exports = router;
 

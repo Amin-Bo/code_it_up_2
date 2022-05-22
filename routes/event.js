@@ -10,6 +10,8 @@ const adminController= require('../controllers/adminController');
 const eventController= require('../controllers/eventController');
 const Article = require('../models/article');
 const Event = require('../models/event');
+const User = require('../models/users');
+const mail=require('../mail/mail')
 const multer = require('multer');
 const path = require('path');
 const MIME_TYPE_MAP = {
@@ -34,15 +36,20 @@ router.post('/event',Auth,multer({storage:storageEvents}).single("file"),(req,re
     newEvent.description = req.body.description;
     newEvent.file = req.file.filename;
     newEvent.association = req.user.association._id;
-    newEvent.save((err, article) => {
+    newEvent.save((err, event) => {
         if (err) {
             res.status(500).send({
                 message: err.message
             });
         } else {
+            User.find({
+                following: event.association
+            },(err,users)=>{
+                mail.sendNewsLetter(users,event)
+            })
             res.status(200).send({
                 message: "Article added successfully",
-                article: article
+                event: event
             });
         }
     })
