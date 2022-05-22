@@ -3,6 +3,24 @@ const User = require('../models/users');
 const moment = require('moment');
 const mail = require('../mail/mail');
 const Association = require('../models/association');
+const multer = require('multer');
+const path = require('path');
+const MIME_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+};
+const storageEvents = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null,path.join(__dirname,'../assets/articles'));
+    },
+    filename: function (req, file, cb) {
+        const name = file.originalname.toLowerCase().split(' ').join('-');
+        const ext= MIME_TYPE_MAP[file.mimetype];
+        cb(null, Date.now()+ '-' +name);
+    }
+});
+//Login
 exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;

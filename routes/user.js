@@ -2,7 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-
+const User = require('../models/users');
+const Association = require('../models/association');
 ///Controllers 
 const AuthController = require('../controllers/authController');
 const Auth = require('../middlwares/Auth');
@@ -27,10 +28,73 @@ const storageEvents = multer.diskStorage({
         cb(null, Date.now()+ '-' +name);
     }
 });
+const storageLogo = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null,path.join(__dirname,'../assets/logos'));
+    },
+    filename: function (req, file, cb) {
+        const name = file.originalname.toLowerCase().split(' ').join('-');
+        const ext= MIME_TYPE_MAP[file.mimetype];
+        cb(null, Date.now()+ '-' +name);
+    }
+});
 //Login
 router.post('/login', AuthController.login);
 //Registration
-router.post('/register',multer({storage:storageEvents}).single("event_img"), AuthController.register);
+router.post('/register',multer({storage:storageLogo}).single("logo"), (req, res, next) => {
+    let newUser = new User({
+        lastName: req.body.lastName,
+        firstName: req.body.firstName,
+        phone: req.body.phone,
+        email: req.body.email,
+        password: req.body.password,
+        cin: req.body.cin,
+        adresse: req.body.adresse,
+        type: req.body.type
+    });
+    if (req.file) {
+        newUser.logo = req.file.filename;
+    }
+    let association = new Association({
+        name: req.body.association,
+        description: req.body.description,
+        email: req.body.emailAssociation,
+        logo: req.file.filename!=null?req.file.filename:' ',
+        founder: newUser._id,
+    });
+    const query = req.body.email;
+    //Check the user exists
+    User.findOne({
+        email: req.body.email
+    }, (err, user) => {
+        //Error during exuting the query
+        if (user) {
+            return res.send({
+                success: false,
+                message: 'Error, User already exists'
+            });
+        } else {
+            newUser.save((err, user) => {
+                if (err) {
+                    return res.send({
+                        success: false,
+                        message: err.message
+                    });
+                } else {
+                    association.save((err, association) => {
+                        if (err) throw err;
+                    })
+                    res.send({
+                        success: true,
+                        message: 'User Saved',
+                        user
+                    });
+                    mail.sendAfterRegister(req, res, next);
+                }
+            });
+        }
+    });
+});
 router.post('/registerUser', AuthController.registerUser);
 
 router.post('/apply/:id', Auth, userController.applyToAssociation);
