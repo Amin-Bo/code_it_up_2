@@ -13,5 +13,8 @@ router.get('/getAllAssociations', adminController.getAllAssociations);
 router.get('/getAssociationById/:id', adminController.getAssociationById);
 router.post('/updateAssociationStatus/:id', adminController.updateAssociationStatus);
 router.get('/myMembers', Auth, adminController.getMembers);
+router.get('/associations', Auth, adminController.CountAssociations);
+router.get('/users', Auth, adminController.CountMembers);
+router.get('/events', Auth, adminController.getEventsStats);
 module.exports = router;
 

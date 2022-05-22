@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const moment = require('moment');
 const mail = require('../mail/mail');
+const Event = require('../models/event');
 const Association = require('../models/association');
 exports.getAllAssociations = (req, res) => {
     Association.find({}, (err, associations) => {
@@ -56,4 +57,46 @@ exports.getMembers=(req,res)=>{
             })
         }
     }).populate('members.member')
+}
+exports.CountAssociations = (req, res) => {
+    Association.countDocuments({}, (err, count) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message
+            });
+        } else {
+            res.status(200).send({
+                count
+            });
+        }
+    })
+}
+exports.CountMembers = (req, res) => {
+    User.countDocuments({}, (err, count) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message
+            });
+        } else {
+            res.status(200).send({
+                count
+            });
+        }
+    }
+    )
+}
+exports.getEventsStats = (req, res) => {
+ Event.countDocuments({}, (err, count) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message
+            });
+        } else {
+            res.status(200).send({
+                count
+            });
+        }
+    }
+    )
+
 }
