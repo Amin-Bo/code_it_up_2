@@ -17,7 +17,6 @@ module.exports = (req, res, next) => {
       Association.find({founder:req.user._id},(err,association)=>{
         if(err)throw err
         else{
-          console.log(association)
           if(association.length>0){
             req.user.association=association[0];
             next();

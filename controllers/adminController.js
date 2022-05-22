@@ -44,3 +44,16 @@ exports.updateAssociationStatus = (req, res) => {
         }
     })
 }
+exports.getMembers=(req,res)=>{
+    Association.findById(req.user.association,(err,members)=>{
+        if(err){
+            res.status(500).send({
+                message:err.message
+            })
+        }else{
+            res.status(200).send({
+                members
+            })
+        }
+    }).populate('members.member')
+}
