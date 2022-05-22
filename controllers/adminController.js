@@ -10,10 +10,7 @@ exports.getAllAssociations = (req, res) => {
                 message: err.message
             });
         } else {
-            res.status(200).send({
-                message: "Association list",
-                associations: associations
-            });
+            res.status(200).send(associations);
         }
     }).populate('founder', ['name', 'email', 'type'])
 }
