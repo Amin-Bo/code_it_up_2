@@ -5,6 +5,7 @@ const passport = require('passport');
 const User = require('../models/users');
 const Association = require('../models/association');
 ///Controllers 
+const mail=require('../mail/mail')
 const AuthController = require('../controllers/authController');
 const Auth = require('../middlwares/Auth');
 const userController = require('../controllers/userController');
@@ -59,9 +60,11 @@ router.post('/register',multer({storage:storageLogo}).single("logo"), (req, res,
         name: req.body.association,
         description: req.body.description,
         email: req.body.emailAssociation,
-        logo: req.file.filename!=null?req.file.filename:' ',
         founder: newUser._id,
     });
+    if(req.file){
+        association.logo = req.file.filename;
+    }
     const query = req.body.email;
     //Check the user exists
     User.findOne({
