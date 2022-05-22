@@ -48,6 +48,19 @@ exports.changeMemberStatus = (req, res, next) => {
 
     })
 }
+exports.getMembers=(req,res)=>{
+    Association.findById(req.params.id,(err,members)=>{
+        if(err){
+            res.status(500).send({
+                message:err.message
+            })
+        }else{
+            res.status(200).send({
+                members
+            })
+        }
+    }).populate('members.member')
+}
 exports.test = (req, res, next) => {
     return res.json(req.user)
 }

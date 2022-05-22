@@ -11,16 +11,14 @@ module.exports = (req, res, next) => {
     const user = decodedToken.user;
     if (!user) {
       throw 'Invalid user ID';
-    } else if(user.type!='founder') {
-      req.user=user;
-      next();
-    }
+    } 
     else{
-      Association.find({founder:user._id},(err,association)=>{
+      req.user=user;
+      Association.find({founder:req.user._id},(err,association)=>{
         if(err)throw err
         else{
+          console.log(association)
           if(association.length>0){
-            req.user=user;
             req.user.association=association[0];
             next();
           }

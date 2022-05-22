@@ -128,6 +128,7 @@ router.post('/article/add', Auth,multer({storage:storageEvents}).single("event_i
         }
     })
 });
+router.get('/members/:id', founderController.getMembers);
 router.post('/follow/:id', Auth, userController.followAssociation);
 module.exports = router;
 
