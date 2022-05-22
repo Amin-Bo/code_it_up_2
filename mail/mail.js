@@ -43,8 +43,7 @@ exports.sendToAdmin = (req, res, next) => {
     return console.log("Email sent!!!");
   });
 };
-exports.sendNewsLetter = (req, res, next) => {
-  console.log(req)
+exports.sendNewsLetter = (member, event, next) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -53,7 +52,7 @@ exports.sendNewsLetter = (req, res, next) => {
     },
   });
   // get Request Sender
-  User.findOne({ _id: req }, (err, user) => {
+  User.findOne({ _id: member._id }, (err, user) => {
     if (!user) return console.log(err);
     else {
         const handlebarOptions = {

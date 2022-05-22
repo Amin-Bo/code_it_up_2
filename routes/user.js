@@ -110,22 +110,28 @@ router.get('/article/get/:id', Auth, articleController.getArticleByAssociation);
 router.get('/article/getById/:id',  articleController.getArticleById);
 router.get('/data',Auth,founderController.test)
 router.post('/article/add', Auth,multer({storage:storageEvents}).single("event_img"), (req, res, next) => {
-    let newArticle = new Article()
-    newArticle.title = req.body.title;
-    newArticle.description = req.body.description;
-    newArticle.file = req.file.filename;
-    newArticle.association = req.user.association._id;
-    newArticle.save((err, article) => {
-        if (err) {
-            res.status(500).send({
-                message: err.message
-            });
-        } else {
-            res.status(200).send({
-                message: "Article added successfully",
-                article: article
-            });
-        }
+    Association.find({founder:req.user._id},(err,association)=>{
+        if(err) throw err;
+  else{
+
+      let newArticle = new Article()
+      newArticle.title = req.body.title;
+      newArticle.description = req.body.description;
+      newArticle.file = req.file.filename;
+      newArticle.association = association._id;
+      newArticle.save((err, article) => {
+          if (err) {
+              res.status(500).send({
+                  message: err.message
+              });
+          } else {
+              res.status(200).send({
+                  message: "Article added successfully",
+                  article: article
+              });
+          }
+      })
+  }
     })
 });
 router.get('/members/:id', founderController.getMembers);
